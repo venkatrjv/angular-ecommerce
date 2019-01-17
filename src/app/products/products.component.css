@@ -1,0 +1,23 @@
+.products-wrapper {
+  align-items: flex-start;
+}
+
+
+
+
+
+
+
+.tr {
+  display: table-row;
+}
+
+.table.is-striped tbody .tr:not(.is-selected):nth-child(even) {
+  background-color: #fafafa;
+}
+
+
+h2 {
+  font-size: 32px;
+  color: crimson;
+}

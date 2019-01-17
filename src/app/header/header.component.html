@@ -1,0 +1,46 @@
+<nav class="navbar is-fixed-top">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item logo" routerLink="/">
+        ng<b>Shop</b>
+      </a>
+      <div class="navbar-burger burger" [ngClass]="{'is-active': menuToggle}" data-target="navbarExampleTransparentExample"
+        (click)="menuToggle = !menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <div id="navbarExampleTransparentExample" class="navbar-menu" [ngClass]="{'is-active': menuToggle}">
+      <div class="navbar-start">
+        <a class="navbar-item" routerLink="/products" routerLinkActive="is-active">
+          <span class="icon">
+            <i class="fas fa-shopping-bag"></i>
+          </span>
+          Products
+        </a>
+        <a class="navbar-item" routerLink="/orders" routerLinkActive="is-active">
+          <span class="icon">
+            <i class="fas fa-envelope-open"></i>
+          </span>
+          Orders
+        </a>
+        <a class="navbar-item" *ngIf="!authService.authenticated()" routerLink="/login" routerLinkActive="is-active">
+          <span class="icon">
+            <i class="fas fa-sign-in-alt"></i>
+          </span>
+          Login/SignUp
+        </a>
+        <a class="navbar-item" *ngIf="authService.authenticated()" (click)="logout()">
+          <span class="icon">
+            <i class="fas fa-sign-in-alt"></i>
+          </span>
+          Logout
+        </a>
+      </div>
+
+      <app-cartmini class="navbar-end mini-cart-wrap"></app-cartmini>
+    </div>
+  </div>
+</nav>

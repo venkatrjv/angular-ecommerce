@@ -1,0 +1,26 @@
+<!-- list layout -->
+  <td class="card--list__name">
+    <h2>
+      <strong>{{ product.name }}</strong>
+    </h2>
+    <p>{{ product.description | truncate:200 }}</p>
+  </td>
+  <td class="card--list__price">
+    <div>
+      {{ product.price | currency }}
+    </div>
+  </td>
+  <td class="card--list__ctas">
+    <div class="buttons has-addons">
+      <a class="button" [routerLink]="['/products', product.id]">
+        <span class="icon is-small">
+          <i class="fas fa-search-plus"></i>
+        </span>
+      </a>
+      <a class="button" (click)="onAddToCart(product)">
+        <span class="icon is-small">
+          <i class="fas fa-cart-plus"></i>
+        </span>
+      </a>
+    </div>
+  </td>
