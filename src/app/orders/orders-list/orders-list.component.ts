@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ProductsService } from "src/app/services/products.service";
 import { Product } from "src/app/products/product.model";
+import { OrderService } from "src/app/services/order.service";
 
 @Component({
   selector: "app-orders-list",
@@ -8,53 +9,24 @@ import { Product } from "src/app/products/product.model";
   styleUrls: ["./orders-list.component.css"]
 })
 export class OrdersListComponent implements OnInit {
-  cartProducts: Product[];
+  cartOrders: Product[];
   cartTotal: number;
-  cartAdditionSubscription;
-  cartTotalSubscription;
+  isAdmin = false;
 
-  constructor(private prodService: ProductsService) {}
+  constructor(private orderService: OrderService) { }
 
   ngOnInit() {
-    this.cartProducts = this.prodService.getCartAddedProducts();
-    this.cartAdditionSubscription = this.prodService.cartAdditionEmitter.subscribe(
-      (products: Product[]) => {
-        this.cartProducts = products;
+    this.getOrderDetails();
+  }
+
+  getOrderDetails() {
+    this.orderService.getOrderList(JSON.parse(localStorage.getItem("user_Data")).id).subscribe(
+      result => {
+        this.cartOrders = result;
       }
-    );
-
-    this.cartTotal = this.prodService.getCartTotal();
-    this.cartTotalSubscription = this.prodService.cartTotalEmitter.subscribe(
-      (cTotal: number) => {
-        this.cartTotal = cTotal;
-      }
-    );
-  }
-
-
-  onValAdd(product: Product) {
-    this.prodService.cartProductManipulate(product, true);
-  }
-  onValSub(product: Product) {
-    this.prodService.cartProductManipulate(product);
-  }
-
-  removeCartProduct(itemIndex: number) {
-    this.prodService.removeCartSingleItem(itemIndex);
-  }
-
-  emptyCart() {
-    this.prodService.emptyCart();
-  }
-
-  onCheckout() {
-    alert(
-      JSON.stringify(this.cartProducts) + "\n\n\n" + "Total: " + this.cartTotal
-    );
+    )
   }
 
   ngOnDestroy() {
-    this.cartAdditionSubscription.unsubscribe();
-    this.cartTotalSubscription.unsubscribe();
   }
 }

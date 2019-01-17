@@ -19,7 +19,7 @@ export class CartComponent implements OnInit, OnDestroy {
     private prodService: ProductsService,
     private orderService: OrderService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.cartProducts = this.prodService.getCartAddedProducts();
@@ -64,6 +64,7 @@ export class CartComponent implements OnInit, OnDestroy {
       .addOrder(order)
       .then(result => {
         alert("Order placed");
+        this.prodService.emptyCart();
         this.router.navigate(["/orders"]);
       })
       .catch(error => {

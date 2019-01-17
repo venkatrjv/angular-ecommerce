@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from 'src/app/products/product.model';
 import { ProductsService } from 'src/app/services/products.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { OrderService } from 'src/app/services/order.service';
 
 @Component({
   selector: 'app-orders-details',
@@ -8,52 +10,49 @@ import { ProductsService } from 'src/app/services/products.service';
   styleUrls: ['./orders-details.component.css']
 })
 export class OrdersDetailsComponent implements OnInit {
-  cartProducts: Product[];
-  cartTotal: number;
-  cartAdditionSubscription;
-  cartTotalSubscription;
+  cartProducts = [];
+  order = {};
   isApproved = "";
-
-  constructor(private prodService: ProductsService) {}
+  isLoading = false;
+  id;
+  constructor(
+    private orderService: OrderService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    this.cartProducts = this.prodService.getCartAddedProducts();
-    this.cartAdditionSubscription = this.prodService.cartAdditionEmitter.subscribe(
-      (products: Product[]) => {
-        this.cartProducts = products;
-      }
+    this.initProductSingleView();
+  }
+
+  initProductSingleView() {
+    this.id = this.route.snapshot.params["id"];
+    this.orderService.getOrderDetailsById(this.id).subscribe(
+      product => {
+        this.cartProducts = product;
+      },
+      err => console.error(err),
+      () => (this.isLoading = false)
     );
 
-    this.cartTotal = this.prodService.getCartTotal();
-    this.cartTotalSubscription = this.prodService.cartTotalEmitter.subscribe(
-      (cTotal: number) => {
-        this.cartTotal = cTotal;
-      }
+    this.orderService.getOrderById(this.id).subscribe(
+      order => {
+        if (order.length > 0)
+          this.order = order[0];
+        else {
+          alert("Order not found");
+          this.router.navigate(["/orders"]);
+        }
+      },
+      err => console.error(err),
+      () => (this.isLoading = false)
     );
   }
 
-  onValAdd(product: Product) {
-    this.prodService.cartProductManipulate(product, true);
-  }
-  onValSub(product: Product) {
-    this.prodService.cartProductManipulate(product);
-  }
 
-  removeCartProduct(itemIndex: number) {
-    this.prodService.removeCartSingleItem(itemIndex);
-  }
-
-  emptyCart() {
-    this.prodService.emptyCart();
-  }
-
-  onCheckout() {
-    alert(JSON.stringify(this.cartProducts) + '\n\n\n' + 'Total: ' + this.cartTotal);
-  }
 
   ngOnDestroy() {
-    this.cartAdditionSubscription.unsubscribe();
-    this.cartTotalSubscription.unsubscribe();
+
   }
 
 }
