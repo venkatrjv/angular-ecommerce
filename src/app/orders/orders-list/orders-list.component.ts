@@ -9,7 +9,7 @@ import { OrderService } from "src/app/services/order.service";
   styleUrls: ["./orders-list.component.css"]
 })
 export class OrdersListComponent implements OnInit {
-  cartOrders: Product[];
+  cartOrders = [];
   cartTotal: number;
   isAdmin = false;
 
