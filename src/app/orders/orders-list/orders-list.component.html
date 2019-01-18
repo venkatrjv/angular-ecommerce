@@ -10,33 +10,33 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let product of cartOrders; let i = index">
+          <tr *ngFor="let order of cartOrders; let i = index">
             <td >
-              <a [routerLink]="['/orders', product.id]">
+              <a [routerLink]="['/orders', order.id]">
                 <h2>
-                  <strong>Order ID #{{ product.id }}</strong>
+                  <strong>Order ID #{{ order.id }}</strong>
                 </h2>
               </a>
             </td>
             <td>
               <div>
-                {{ product.total | currency }}
+                {{ order.total | currency }}
               </div>
             </td>
             <td>
               <div>
-                {{ product.is_approved === 1 ? 'Approved' : 'Not Approved' }}
+                {{ getStatus(order) }}
               </div>
             </td>
             <td>
               <div>
-                <span class="icon has-text-danger" *ngIf="product.is_approved === 0 && !isAdmin" (click)="removeCartProduct(i)">
+                <span class="icon has-text-danger pointer" title="Edit" *ngIf="order.is_approved === 0 && order.status === 1 && !isAdmin" (click)="removeCartorder(order)">
                   <i class="fas fa-edit"></i>
                 </span>
-                <span class="icon has-text-danger" *ngIf="product.is_approved === 0  && isAdmin" (click)="removeCartProduct(i)">
+                <span class="icon has-text-danger pointer" title="Approve" *ngIf="order.is_approved === 0 && order.status === 1 && isAdmin" (click)="onApprove(order)">
                   <i class="fas fa-check"></i>
                 </span>
-                <span class="icon has-text-danger" *ngIf="product.is_approved === 0  && !isAdmin" (click)="removeCartProduct(i)">
+                <span class="icon has-text-danger pointer" title="Remove" *ngIf="order.is_approved === 0 && order.status === 1 && !isAdmin" (click)="onRemove(order)">
                   <i class="fas fa-trash-alt"></i>
                 </span>
               </div>
@@ -50,6 +50,6 @@
   <div class="column" *ngIf="!cartOrders.length">
     <h2 class="has-text-centered">You Orders is Empty</h2>
 
-    <p class="has-text-centered">Buy some <a class="has-text-danger" routerLink="/products" style="cursor: pointer">products</a></p>
+    <!-- <p class="has-text-centered">Buy some <a class="has-text-danger" routerLink="/orders" style="cursor: pointer">orders</a></p> -->
   </div>
 </div>

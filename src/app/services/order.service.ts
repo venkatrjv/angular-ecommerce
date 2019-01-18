@@ -12,6 +12,26 @@ export class OrderService {
     );
   }
 
+  public approveOrder(orderID) {
+    return this.httpClient.put<any[]>(
+      `${environment.apiBase}/orders/updateOrderApproved`, { id: orderID }
+    );
+  }
+
+
+  public removeOrder(orderID) {
+    return this.httpClient.post<any[]>(
+      `${environment.apiBase}/orders/deleteOrder`, { id: orderID }
+    );
+  }
+
+  public getUnApprovedOrders() {
+    return this.httpClient.post<any[]>(
+      `${environment.apiBase}/orders/getUnApprovedOrders`, {});
+  }
+
+
+
   public getOrderById(orderID) {
     return this.httpClient.get<any[]>(
       `${environment.apiBase}/orders/` + orderID

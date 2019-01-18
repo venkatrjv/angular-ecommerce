@@ -6,7 +6,7 @@ import { environment } from "../../environments/environment";
 
 @Injectable()
 export class AuthService {
-  constructor(public router: Router, public _HttpClient: HttpClient) {}
+  constructor(public router: Router, public _HttpClient: HttpClient) { }
 
   public loginURL(username, password) {
     return this._HttpClient.post<any[]>(
@@ -30,5 +30,29 @@ export class AuthService {
     // access token's expiry time
     const user = JSON.parse(localStorage.getItem("user_Data") || "{}");
     return !_.isEmpty(user);
+  }
+
+  public isAdmin(): boolean {
+    // Check whether the current time is past the
+    // access token's expiry time
+    const user = JSON.parse(localStorage.getItem("user_Data") || "{}");
+    if (_.has(user, "username")) {
+      return user["username"] === 'admin';
+    } else {
+      return false;
+    }
+  }
+
+  public signUp(data) {
+    return this._HttpClient.post<any[]>(
+      `${environment.apiBase}/auth/addUser`,
+      {
+        email: data.email,
+        username: data.username,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName
+      }
+    );
   }
 }

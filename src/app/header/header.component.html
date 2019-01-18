@@ -14,7 +14,7 @@
 
     <div id="navbarExampleTransparentExample" class="navbar-menu" [ngClass]="{'is-active': menuToggle}">
       <div class="navbar-start">
-        <a class="navbar-item" routerLink="/products" routerLinkActive="is-active">
+        <a class="navbar-item" routerLink="/products" *ngIf="!authService.isAdmin()" routerLinkActive="is-active">
           <span class="icon">
             <i class="fas fa-shopping-bag"></i>
           </span>
@@ -40,7 +40,7 @@
         </a>
       </div>
 
-      <app-cartmini class="navbar-end mini-cart-wrap"></app-cartmini>
+      <app-cartmini *ngIf="!authService.isAdmin()" class="navbar-end mini-cart-wrap"></app-cartmini>
     </div>
   </div>
 </nav>

@@ -1,23 +1,23 @@
 <div class="login-form">
-  <form>
+  <form [formGroup]="signUpForm" onsubmit="return false;">
     <h2 class="text-center">Sign Up</h2>
     <div class="form-group">
-      <input type="text" class="form-control" placeholder="First Name" required="required">
+      <input type="text" class="form-control" formControlName="firstName" name="fname" placeholder="First Name" required="required">
     </div>
     <div class="form-group">
-      <input type="text" class="form-control" placeholder="last Name" required="required">
+      <input type="text" class="form-control" formControlName="lastName" name="lname" placeholder="last Name" required="required">
     </div>
     <div class="form-group">
-      <input type="email" class="form-control" placeholder="Email" required="required">
+      <input type="email" class="form-control" formControlName="email" name="email" placeholder="Email" required="required">
     </div>
     <div class="form-group">
-      <input type="text" class="form-control" placeholder="Username" required="required">
+      <input type="text" class="form-control" formControlName="username" name="uname" placeholder="Username" required="required">
     </div>
     <div class="form-group">
-      <input type="password" class="form-control" placeholder="Password" required="required">
+      <input type="password" class="form-control" formControlName="password" name="pass" placeholder="Password" required="required">
     </div>
     <div class="form-group">
-      <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+      <button type="submit" class="btn btn-primary btn-block" (click)="onSignUp()">Sign Up</button>
     </div>
   </form>
   <p class="text-center"><a routerLink="/login">Login</a></p>

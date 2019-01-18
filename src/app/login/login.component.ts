@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
   displaySpinner = false;
   @ViewChild("errorMessage")
   errorMessage;
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     if (this.authService.authenticated()) {
@@ -28,7 +28,11 @@ export class LoginComponent implements OnInit {
         result => {
           if (result.length > 0) {
             localStorage.setItem("user_Data", JSON.stringify(result[0]));
-            this.router.navigate(["/products"]);
+            if (this.authService.isAdmin()) {
+              this.router.navigate(["/orders"]);
+            } else {
+              this.router.navigate(["/products"]);
+            }
           } else {
             this.displayError({ error_description: "User not found." });
           }
