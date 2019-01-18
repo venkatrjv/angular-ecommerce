@@ -19,17 +19,13 @@
             </td>
             <td>
               <div>
-                <app-number-input
-                  [val]="product.qty"
-                  (valAdd)="onValAdd(product)"
-                  (valSub)="onValSub(product)"
-                  [minDisabled]="product.qty === 1"
-                ></app-number-input>
+                <app-number-input [val]="product.qty" (valAdd)="onValAdd(product)" (valSub)="onValSub(product)"
+                  [minDisabled]="product.qty === 1"></app-number-input>
               </div>
             </td>
             <td>
               <div>
-                 {{ product.price | currency }}
+                {{ product.price | currency }}
               </div>
             </td>
             <td>
@@ -62,7 +58,7 @@
             </span>&nbsp; Empty Cart
           </a>
         </div>
-        <div class="panel-block has-text-centered">
+        <div class="panel-block has-text-centered" *ngIf="prodService.getOrderID() === ''">
           <a class="button is-success" style="cursor: pointer;" (click)="onCheckout()">
             <span class="icon">
               <i class="fas fa-check"></i>
@@ -70,6 +66,16 @@
             Checkout
           </a>
         </div>
+        <div class="panel-block has-text-centered" *ngIf="prodService.getOrderID() !== ''">
+          <a class="button is-success" style="cursor: pointer;" (click)="onUpdateCheckout()">
+            <span class="icon">
+              <i class="fas fa-check"></i>
+            </span>&nbsp;
+            Update Order
+          </a>
+        </div>
+
+
       </div>
     </div>
   </ng-container>

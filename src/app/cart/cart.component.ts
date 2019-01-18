@@ -49,12 +49,11 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   emptyCart() {
+    this.prodService.setOrderID("");
     this.prodService.emptyCart();
   }
 
   onCheckout() {
-    // alert(JSON.stringify(this.cartProducts) + '\n\n\n' + 'Total: ' + this.cartTotal);
-    debugger;
     let order = {
       total: this.cartTotal.toFixed(2),
       userID: JSON.parse(localStorage.getItem("user_Data")).id || "",
@@ -65,6 +64,26 @@ export class CartComponent implements OnInit, OnDestroy {
       .then(result => {
         alert("Order placed");
         this.prodService.emptyCart();
+        this.router.navigate(["/orders"]);
+      })
+      .catch(error => {
+        alert(JSON.stringify(error));
+      });
+  }
+
+  onUpdateCheckout() {
+    let order = {
+      id: this.prodService.getOrderID(),
+      total: this.cartTotal.toFixed(2),
+      userID: JSON.parse(localStorage.getItem("user_Data")).id || "",
+      data: this.cartProducts
+    };
+    this.orderService
+      .updateOrder(order)
+      .then(result => {
+        alert("Order updated");
+        this.prodService.emptyCart();
+        this.prodService.setOrderID("");
         this.router.navigate(["/orders"]);
       })
       .catch(error => {

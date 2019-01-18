@@ -18,6 +18,13 @@ export class OrderService {
     );
   }
 
+  public rejectOrder(orderID) {
+    return this.httpClient.put<any[]>(
+      `${environment.apiBase}/orders/updateOrderRejected`, { id: orderID }
+    );
+  }
+  
+
 
   public removeOrder(orderID) {
     return this.httpClient.post<any[]>(
@@ -75,6 +82,40 @@ export class OrderService {
             reject({
               error_description: "Something went wrong, try again later."
             });
+          }
+        );
+    });
+  }
+
+  public updateOrder(order) {
+    return new Promise((resolve, reject) => {
+      this.httpClient
+        .put(`${environment.apiBase}/orders/updateOrder`, { order })
+        .subscribe(
+          (result: any[]) => {
+            if (result) {
+              order["id"] = order.id;
+              order.data.forEach(element => {
+                element["order_id"] = order.id;
+              });
+              this.httpClient
+                .post(`${environment.apiBase}/orders/addOrderDetails`, order)
+                .subscribe(
+                  (result: any[]) => {
+                    resolve(result);
+                  },
+                  err => {
+                    reject(err);
+                  }
+                );
+            } else {
+              reject({
+                error_description: "Error while placing the order."
+              });
+            }
+          },
+          error => {
+            reject(error);
           }
         );
     });

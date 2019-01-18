@@ -11,7 +11,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let order of cartOrders; let i = index">
-            <td >
+            <td>
               <a [routerLink]="['/orders', order.id]">
                 <h2>
                   <strong>Order ID #{{ order.id }}</strong>
@@ -30,13 +30,20 @@
             </td>
             <td>
               <div>
-                <span class="icon has-text-danger pointer" title="Edit" *ngIf="order.is_approved === 0 && order.status === 1 && !isAdmin" (click)="removeCartorder(order)">
+                <span class="icon has-text-danger pointer" title="Edit" *ngIf="order.is_approved === 0 && order.status === 1 && !isAdmin"
+                  (click)="onEdit(order)">
                   <i class="fas fa-edit"></i>
                 </span>
-                <span class="icon has-text-danger pointer" title="Approve" *ngIf="order.is_approved === 0 && order.status === 1 && isAdmin" (click)="onApprove(order)">
+                <span class="icon has-text-danger pointer" title="Approve" *ngIf="order.is_approved === 0 && order.status === 1 && isAdmin"
+                  (click)="onApprove(order)">
                   <i class="fas fa-check"></i>
                 </span>
-                <span class="icon has-text-danger pointer" title="Remove" *ngIf="order.is_approved === 0 && order.status === 1 && !isAdmin" (click)="onRemove(order)">
+                <span class="icon has-text-danger pointer" title="Reject" *ngIf="order.is_approved === 0 && order.status === 1 && isAdmin"
+                  (click)="onRejected(order)">
+                  <i class="fas fa-ban"></i>
+                </span>
+                <span class="icon has-text-danger pointer" title="Remove" *ngIf="order.is_approved === 0 && order.status === 1 && !isAdmin"
+                  (click)="onRemove(order)">
                   <i class="fas fa-trash-alt"></i>
                 </span>
               </div>

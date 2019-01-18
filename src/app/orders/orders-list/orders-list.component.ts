@@ -15,7 +15,7 @@ export class OrdersListComponent implements OnInit {
   cartTotal: number;
   isAdmin = false;
 
-  constructor(private orderService: OrderService, private authService: AuthService) { }
+  constructor(private orderService: OrderService, private authService: AuthService, private productsService: ProductsService) { }
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
@@ -29,8 +29,12 @@ export class OrdersListComponent implements OnInit {
   getStatus(order) {
     if (order.status === 0) {
       return 'Canceled';
-    } else {
-      return order.is_approved === 1 ? 'Approved' : 'Not Approved';
+    } else if (order.is_approved === 1) {
+      return 'Approved';
+    } else if (order.is_approved === 2) {
+      return 'Rejected';
+    } else if (order.is_approved === 0) {
+      return 'Not Approved'
     }
   }
 
@@ -50,10 +54,36 @@ export class OrdersListComponent implements OnInit {
     )
   }
 
+  cartProducts = [];
+  onEdit(order) {
+    this.productsService.emptyCart();
+    this.orderService.getOrderDetailsById(order.id).subscribe(
+      product => {
+        this.cartProducts = product;
+        product.forEach(element => {
+          for (let i = 0; i < element.quantity; i++) {
+            this.productsService.addToCart(element);
+          }
+          this.productsService.setOrderID(order.id);
+        });
+      },
+      err => console.error(err)
+    );
+  }
+
   onApprove(order) {
     this.orderService.approveOrder(order.id).subscribe(
       result => {
         alert("Order Approved");
+        _.remove(this.cartOrders, order);
+      }
+    )
+  }
+
+  onRejected(order) {
+    this.orderService.rejectOrder(order.id).subscribe(
+      result => {
+        alert("Order Rejected");
         _.remove(this.cartOrders, order);
       }
     )

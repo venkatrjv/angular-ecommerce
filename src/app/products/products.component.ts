@@ -11,7 +11,7 @@ import { Router } from "@angular/router";
   styleUrls: ["./products.component.css"]
 })
 export class ProductsComponent implements OnInit, OnDestroy {
-  products: Product[];
+  products = [];
   filterBy: string;
   searchText: string;
   layoutMode: boolean; // true for grid, false for list

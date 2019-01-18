@@ -20,6 +20,7 @@ export class ProductsService {
   private cartAddedProducts: Product[] = [];
   private cartTotal = 0;
   private selectedProduct: Product;
+  private orderIDEditMode = "";
   private filterBy = "all";
   private search = "";
   private layoutMode =
@@ -29,7 +30,7 @@ export class ProductsService {
     private router: Router,
     private httpClient: HttpClient,
     private toastyNotifications: ToastyNotificationsService
-  ) {}
+  ) { }
 
   fetchCategoryFromDB() {
     return this.httpClient.get<any[]>(
@@ -52,6 +53,7 @@ export class ProductsService {
     this.filterBy = filterValue;
     this.filterTypeEmitter.emit(this.filterBy);
   }
+
   getFilter() {
     return this.filterBy;
   }
@@ -133,6 +135,14 @@ export class ProductsService {
     this.cartTotalEmitter.emit(this.cartTotal);
     this.router.navigate(["/products"]);
     this.toastyNotifications.addToast(true);
+  }
+
+  setOrderID(id) {
+    this.orderIDEditMode = id;
+  }
+
+  getOrderID() {
+    return this.orderIDEditMode;
   }
 
   getLayout() {
